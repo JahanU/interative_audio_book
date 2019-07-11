@@ -1,6 +1,13 @@
 # interative_audio_book
 
-A new Flutter application.
+IBM AI Challenge, task 5: 
+
+Challenge: Interactive Storytelling for Visually Impaired
+Create an audio only interactive story where the player is the main character and makes choices which effect the outcome of the story.
+This would make for a great adventure type game for those who are visually impaired.
+watson Speech to Text, Text to Speech, Watson Virtual Assistant would all be useful here.
+Inspiration Choose Your Own Adventure books.
+
 
 ## Getting Started
 
