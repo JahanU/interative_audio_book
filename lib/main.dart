@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'story_page.dart';
+import 'package:interative_audio_book/backend/story_object.dart';
 
-void main() => runApp(MyApp());
+main() {
+  createObject();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -30,60 +35,27 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeWidget extends StatelessWidget {
-  List<int> _pauseTracker = [0,0,0];
-  List<Color> _borderColors = [Colors.white, Colors.white, Colors.white];
-  var _titles = [
-    "Axe Trauma in the Woods (A)",
-    "Whispers in the Dark (B)",
-    "Story of Sparta (C)"
-  ];
-  var _images = [
-    "https://i.ytimg.com/vi/wrRNj9gJezA/maxresdefault.jpg",
-    "https://static.turbosquid.com/Preview/001242/868/9P/dark-horror-hospital-room-model_D.jpg",
-    "http://etc.ancient.eu/wp-content/uploads/2016/08/MV5BMTI2OTA1MTEzMV5BMl5BanBnXkFtZTcwMzg1NTIyMw@@._V1_SX1777_CR001777927_AL_.jpg"
-  ];
+  List<int> _pauseTracker = [0, 0, 0];
+
 
   @override
   Widget build(BuildContext context) {
+
+    print(allStories.length);
+
     return new ListView.builder(
-      itemCount: 3,
-      itemBuilder: (context, rowNumber) {
+      itemCount: allStories.length,
+      itemBuilder: (context, index) {
         return new FlatButton(
-
-          onPressed: () {//Each rowNumber keeps track of a button in the ListView.
-            if (rowNumber == 0) {
-              print("Playing story A");
-              _pauseTracker[0] = _pauseTracker[0] + 1;
-              if(_pauseTracker[0]%2 == 0){ //If user clicks on a row an even number of times then they must wish to stop playing the recording. Clicks tracked in array 'pauseTracker'.
-                _borderColors = [Colors.white, Colors.white, Colors.white]; //In this scenario we indicate the recording has stopped playing by deselecting the row. (Setting back to white)
-              }
-              else{
-                _borderColors = [Colors.blue, Colors.white, Colors.white];
-              }
-            }
-            else if (rowNumber == 1) {
-              print("Playing story B");
-              _pauseTracker[0] = _pauseTracker[1] + 1;
-              if(_pauseTracker[1]%2 == 0){
-                _borderColors = [Colors.white, Colors.white, Colors.white];
-              }
-              else{
-                _borderColors = [Colors.white, Colors.blue, Colors.white];
-
-              }
-            }
-
-            else if(rowNumber == 2){
-              print("Playing story C");
-              _pauseTracker[0] = _pauseTracker[2] + 1;
-              if(_pauseTracker[2]%2 == 0){
-                _borderColors = [Colors.white, Colors.white, Colors.white];
-              }
-              else{
-                _borderColors = [Colors.white, Colors.white, Colors.blue];
-              }
-            }
+          onPressed: () {
+            // Open story Page
+            Navigator.push(context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) => new StoryPage(allStories[index])
+                )
+            );
           },
+
           child: new Column(
             children: <Widget>[
               new Tooltip(
@@ -93,17 +65,18 @@ class HomeWidget extends StatelessWidget {
                       new Container(
                           decoration: new BoxDecoration(
                               border: new Border.all(
-                                  color: _borderColors[rowNumber])),
+                                  color: Colors.white
+                              )
+                          ),
                           child: Image.network(
-                            _images[rowNumber],
+                            allStories[index].image,
                             width: 400.0,
                             height: 200.0,
                           )),
                       new Icon(
                         Icons.play_circle_filled,
-
                       ),
-                      new Text(_titles[rowNumber],
+                      new Text(allStories[index].title,
                           style: new TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18.0)),
                     ])),
@@ -119,3 +92,37 @@ class HomeWidget extends StatelessWidget {
     );
   }
 }
+
+//Each rowNumber keeps track of a button in the ListView.
+//if (rowNumber == 0) {
+//print("Playing story A");
+//_pauseTracker[0] = _pauseTracker[0] + 1;
+//if(_pauseTracker[0]%2 == 0){ //If user clicks on a row an even number of times then they must wish to stop playing the recording. Clicks tracked in array 'pauseTracker'.
+//_borderColors = [Colors.white, Colors.white, Colors.white]; //In this scenario we indicate the recording has stopped playing by deselecting the row. (Setting back to white)
+//}
+//else{
+//_borderColors = [Colors.blue, Colors.white, Colors.white];
+//}
+//}
+//else if (rowNumber == 1) {
+//print("Playing story B");
+//_pauseTracker[0] = _pauseTracker[1] + 1;
+//if(_pauseTracker[1]%2 == 0){
+//_borderColors = [Colors.white, Colors.white, Colors.white];
+//}
+//else{
+//_borderColors = [Colors.white, Colors.blue, Colors.white];
+//
+//}
+//}
+//
+//else if(rowNumber == 2){
+//print("Playing story C");
+//_pauseTracker[0] = _pauseTracker[2] + 1;
+//if(_pauseTracker[2]%2 == 0){
+//_borderColors = [Colors.white, Colors.white, Colors.white];
+//}
+//else{
+//_borderColors = [Colors.white, Colors.white, Colors.blue];
+//}
+//}
