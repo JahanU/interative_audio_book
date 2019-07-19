@@ -6,106 +6,116 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "IBM Challenge 2019",
+        home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Stories"),
+            centerTitle: true,
+            backgroundColor: Colors.teal,
+            actions: <Widget>[
+              new IconButton(
+                icon: new Icon(Icons.record_voice_over),
+                tooltip: "Instructions",
+                onPressed: () {
+                  print("Text to speech for instructions here");
+                },
+              )
+            ],
+          ),
+          body: new HomeWidget(),
+        ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class HomeWidget extends StatelessWidget {
+  List<int> _pauseTracker = [0,0,0];
+  List<Color> _borderColors = [Colors.white, Colors.white, Colors.white];
+  var _titles = [
+    "Axe Trauma in the Woods (A)",
+    "Whispers in the Dark (B)",
+    "Story of Sparta (C)"
+  ];
+  var _images = [
+    "https://i.ytimg.com/vi/wrRNj9gJezA/maxresdefault.jpg",
+    "https://static.turbosquid.com/Preview/001242/868/9P/dark-horror-hospital-room-model_D.jpg",
+    "http://etc.ancient.eu/wp-content/uploads/2016/08/MV5BMTI2OTA1MTEzMV5BMl5BanBnXkFtZTcwMzg1NTIyMw@@._V1_SX1777_CR001777927_AL_.jpg"
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    return new ListView.builder(
+      itemCount: 3,
+      itemBuilder: (context, rowNumber) {
+        return new FlatButton(
+
+          onPressed: () {//Each rowNumber keeps track of a button in the ListView.
+            if (rowNumber == 0) {
+              print("Playing story A");
+              _pauseTracker[0] = _pauseTracker[0] + 1;
+              if(_pauseTracker[0]%2 == 0){ //If user clicks on a row an even number of times then they must wish to stop playing the recording. Clicks tracked in array 'pauseTracker'.
+                _borderColors = [Colors.white, Colors.white, Colors.white]; //In this scenario we indicate the recording has stopped playing by deselecting the row. (Setting back to white)
+              }
+              else{
+                _borderColors = [Colors.blue, Colors.white, Colors.white];
+              }
+            }
+            else if (rowNumber == 1) {
+              print("Playing story B");
+              _pauseTracker[0] = _pauseTracker[1] + 1;
+              if(_pauseTracker[1]%2 == 0){
+                _borderColors = [Colors.white, Colors.white, Colors.white];
+              }
+              else{
+                _borderColors = [Colors.white, Colors.blue, Colors.white];
+
+              }
+            }
+
+            else if(rowNumber == 2){
+              print("Playing story C");
+              _pauseTracker[0] = _pauseTracker[2] + 1;
+              if(_pauseTracker[2]%2 == 0){
+                _borderColors = [Colors.white, Colors.white, Colors.white];
+              }
+              else{
+                _borderColors = [Colors.white, Colors.white, Colors.blue];
+              }
+            }
+          },
+          child: new Column(
+            children: <Widget>[
+              new Tooltip(
+                child: new Container(
+                    padding: new EdgeInsets.all(14.0),
+                    child: new Column(children: <Widget>[
+                      new Container(
+                          decoration: new BoxDecoration(
+                              border: new Border.all(
+                                  color: _borderColors[rowNumber])),
+                          child: Image.network(
+                            _images[rowNumber],
+                            width: 400.0,
+                            height: 200.0,
+                          )),
+                      new Icon(
+                        Icons.play_circle_filled,
+
+                      ),
+                      new Text(_titles[rowNumber],
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    ])),
+                message: "Play",
+              )
+              //new Divider(
+              //color: Colors.white,
+              //)
+            ],
+          ),
+        );
+      },
     );
   }
 }
