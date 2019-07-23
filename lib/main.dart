@@ -37,10 +37,8 @@ class MyApp extends StatelessWidget {
 class HomeWidget extends StatelessWidget {
   List<int> _pauseTracker = [0, 0, 0];
 
-
   @override
   Widget build(BuildContext context) {
-
     print(allStories.length);
 
     return new ListView.builder(
@@ -49,13 +47,12 @@ class HomeWidget extends StatelessWidget {
         return new FlatButton(
           onPressed: () {
             // Open story Page
-            Navigator.push(context,
+            Navigator.push(
+                context,
                 new MaterialPageRoute(
-                    builder: (BuildContext context) => new StoryPage(selectedStory: allStories[index])
-                )
-            );
+                    builder: (BuildContext context) =>
+                        new StoryPage(selectedStory: allStories[index])));
           },
-
           child: new Column(
             children: <Widget>[
               new Tooltip(
@@ -64,10 +61,7 @@ class HomeWidget extends StatelessWidget {
                     child: new Column(children: <Widget>[
                       new Container(
                           decoration: new BoxDecoration(
-                              border: new Border.all(
-                                  color: Colors.white
-                              )
-                          ),
+                              border: new Border.all(color: Colors.white)),
                           child: Image.network(
                             allStories[index].image,
                             width: 400.0,
@@ -92,37 +86,3 @@ class HomeWidget extends StatelessWidget {
     );
   }
 }
-
-//Each rowNumber keeps track of a button in the ListView.
-//if (rowNumber == 0) {
-//print("Playing story A");
-//_pauseTracker[0] = _pauseTracker[0] + 1;
-//if(_pauseTracker[0]%2 == 0){ //If user clicks on a row an even number of times then they must wish to stop playing the recording. Clicks tracked in array 'pauseTracker'.
-//_borderColors = [Colors.white, Colors.white, Colors.white]; //In this scenario we indicate the recording has stopped playing by deselecting the row. (Setting back to white)
-//}
-//else{
-//_borderColors = [Colors.blue, Colors.white, Colors.white];
-//}
-//}
-//else if (rowNumber == 1) {
-//print("Playing story B");
-//_pauseTracker[0] = _pauseTracker[1] + 1;
-//if(_pauseTracker[1]%2 == 0){
-//_borderColors = [Colors.white, Colors.white, Colors.white];
-//}
-//else{
-//_borderColors = [Colors.white, Colors.blue, Colors.white];
-//
-//}
-//}
-//
-//else if(rowNumber == 2){
-//print("Playing story C");
-//_pauseTracker[0] = _pauseTracker[2] + 1;
-//if(_pauseTracker[2]%2 == 0){
-//_borderColors = [Colors.white, Colors.white, Colors.white];
-//}
-//else{
-//_borderColors = [Colors.white, Colors.white, Colors.blue];
-//}
-//}

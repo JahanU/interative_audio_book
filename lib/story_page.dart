@@ -77,8 +77,9 @@ class _StoryPageState extends State<StoryPage> {
                 ),
               ),
               new FloatingActionButton(
-                backgroundColor:
-                    _saidYes ? Colors.green : _saidNo ? Colors.red : Colors.blue,
+                backgroundColor: _saidYes
+                    ? Colors.green
+                    : _saidNo ? Colors.red : Colors.blue,
                 mini: true,
               ),
               new Container(
@@ -146,15 +147,18 @@ class _StoryPageState extends State<StoryPage> {
                               .listen(locale: 'en_GB')
                               .then((result) => print(' $result'));
                         }
-                        if (resultText.contains('yeah') ||
-                            resultText.contains('yes')) {
-                          _saidYes = true;
-                          _saidNo = false;
-                        } else if (resultText.contains('no') ||
-                            resultText.contains('nope')) {
-                          _saidNo = true;
-                          _saidYes = false;
-                        }
+                        setState(() {
+                          if (resultText.contains('yeah') ||
+                              resultText.contains('yes')) {
+                            _saidYes = true;
+                            _saidNo = false;
+                          } else if (resultText.contains('no') ||
+                              resultText.contains('nope')) {
+                            _saidNo = true;
+                            _saidYes = false;
+                          }
+                        });
+
                       },
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
