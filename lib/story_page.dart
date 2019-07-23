@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:interative_audio_book/backend/story_object.dart';
-import 'backend/voice_to_text.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 
 class StoryPage extends StatefulWidget {
@@ -29,20 +28,20 @@ class _StoryPageState extends State<StoryPage> {
     _speechRecognition = SpeechRecognition();
 
     _speechRecognition.setAvailabilityHandler(
-      (bool result) => setState(() => _isAvaliable = result),
+          (bool result) => setState(() => _isAvaliable = result),
     );
 
     _speechRecognition.setRecognitionStartedHandler(
-      () => setState(() => _isListening = true),
+          () => setState(() => _isListening = true),
     );
 
     _speechRecognition.setRecognitionResultHandler(
-      (String speech) => setState(() => resultText = speech),
+          (String speech) => setState(() => resultText = speech),
     );
 
     _speechRecognition.setRecognitionCompleteHandler(
-      () => setState(
-        () {
+          () => setState(
+            () {
           _isListening = false;
           _pressAttention = false;
         },
@@ -51,7 +50,7 @@ class _StoryPageState extends State<StoryPage> {
 
     _speechRecognition.activate().then(
           (result) => setState(() => _isAvaliable = result),
-        );
+    );
   }
 
   @override
@@ -111,11 +110,11 @@ class _StoryPageState extends State<StoryPage> {
 //                        if (_isListening == true) {
                         _speechRecognition.stop().then(
                               (result) => setState(() {
-                                _isListening = result;
-                                resultText = '';
-                                _pressAttention = false;
-                              }),
-                            );
+                            _isListening = result;
+                            resultText = '';
+                            _pressAttention = false;
+                          }),
+                        );
 //                        }
                       },
                       shape: new RoundedRectangleBorder(
@@ -137,9 +136,9 @@ class _StoryPageState extends State<StoryPage> {
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
                           ? EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 30.0)
+                          vertical: 10.0, horizontal: 30.0)
                           : EdgeInsets.symmetric(
-                              vertical: 1.0, horizontal: 24.0),
+                          vertical: 1.0, horizontal: 24.0),
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),
 
@@ -148,7 +147,7 @@ class _StoryPageState extends State<StoryPage> {
             ],
           ),
           decoration:
-              new BoxDecoration(border: new Border.all(color: Colors.white)),
+          new BoxDecoration(border: new Border.all(color: Colors.white)),
         ),
       ),
     );
