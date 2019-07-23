@@ -73,9 +73,9 @@ class HomeWidget extends StatelessWidget {
                             width: 400.0,
                             height: 200.0,
                           )),
-                      new Icon(
-                        Icons.play_circle_filled,
-                      ),
+//                      new Icon(
+//                        Icons.play_circle_filled,
+//                      ),
                       new Text(allStories[index].title,
                           style: new TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18.0)),
