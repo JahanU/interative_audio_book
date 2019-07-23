@@ -28,29 +28,26 @@ class _StoryPageState extends State<StoryPage> {
     _speechRecognition = SpeechRecognition();
 
     _speechRecognition.setAvailabilityHandler(
-          (bool result) => setState(() => _isAvaliable = result),
-    );
+        (bool result) => setState(() => _isAvaliable = result));
 
     _speechRecognition.setRecognitionStartedHandler(
-          () => setState(() => _isListening = true),
-    );
+        () => setState(() => _isListening = true));
 
     _speechRecognition.setRecognitionResultHandler(
-          (String speech) => setState(() => resultText = speech),
-    );
+        (String speech) => setState(() => resultText = speech));
 
     _speechRecognition.setRecognitionCompleteHandler(
-          () => setState(
-            () {
+      () => setState(
+        () {
           _isListening = false;
           _pressAttention = false;
         },
       ),
     );
 
-    _speechRecognition.activate().then(
-          (result) => setState(() => _isAvaliable = result),
-    );
+    _speechRecognition
+        .activate()
+        .then((result) => setState(() => _isAvaliable = result));
   }
 
   @override
@@ -69,33 +66,41 @@ class _StoryPageState extends State<StoryPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.network(
-                widget.selectedStory.image,
-                width: 400.0,
-                height: 200.0,
+              new Container(
+                margin: const EdgeInsets.all(10.0),
+                child: Image.network(
+                  widget.selectedStory.image,
+                  width: 400.0,
+                  height: 200.0,
+                ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width *
-                    0.85, // Gets 60% width of the screen
-                height: MediaQuery.of(context).size.height *
-                    0.3, // Gets 60% height of the screen
-
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  color: Colors.grey[100],
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 0.2,
+              new Container(
+                child: Expanded(
+                  child: new SingleChildScrollView(
+                    child: new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.2,
+                        ),
+                      ),
+                      child: new Text(
+                        widget.selectedStory.story,
+                        textDirection: TextDirection.ltr,
+                      ),
+                    ),
                   ),
                 ),
-                child: Text('Story goes here'),
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: Colors.lightBlue[50]),
+                height: MediaQuery.of(context).size.height * 0.065,
+                decoration: BoxDecoration(color: Colors.lightBlue[50]),
                 child: Text(resultText),
               ),
               Row(
@@ -110,11 +115,11 @@ class _StoryPageState extends State<StoryPage> {
 //                        if (_isListening == true) {
                         _speechRecognition.stop().then(
                               (result) => setState(() {
-                            _isListening = result;
-                            resultText = '';
-                            _pressAttention = false;
-                          }),
-                        );
+                                _isListening = result;
+                                resultText = '';
+                                _pressAttention = false;
+                              }),
+                            );
 //                        }
                       },
                       shape: new RoundedRectangleBorder(
@@ -136,18 +141,17 @@ class _StoryPageState extends State<StoryPage> {
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
                           ? EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 30.0)
+                              vertical: 10.0, horizontal: 30.0)
                           : EdgeInsets.symmetric(
-                          vertical: 1.0, horizontal: 24.0),
+                              vertical: 1.0, horizontal: 24.0),
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),
-
                 ],
               )
             ],
           ),
           decoration:
-          new BoxDecoration(border: new Border.all(color: Colors.white)),
+              new BoxDecoration(border: new Border.all(color: Colors.white)),
         ),
       ),
     );
