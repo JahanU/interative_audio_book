@@ -17,6 +17,8 @@ class _StoryPageState extends State<StoryPage> {
   bool _isAvaliable = false;
   bool _isListening = false;
   bool _pressAttention = false;
+  bool _saidYes = false;
+  bool _saidNo = false;
 
   @override
   void initState() {
@@ -74,6 +76,11 @@ class _StoryPageState extends State<StoryPage> {
                   height: 200.0,
                 ),
               ),
+              new FloatingActionButton(
+                backgroundColor:
+                    _saidYes ? Colors.green : _saidNo ? Colors.red : Colors.blue,
+                mini: true,
+              ),
               new Container(
                 child: Expanded(
                   child: new SingleChildScrollView(
@@ -81,7 +88,6 @@ class _StoryPageState extends State<StoryPage> {
                       margin: const EdgeInsets.all(10.0),
                       padding: const EdgeInsets.all(10.0),
                       width: MediaQuery.of(context).size.width * 0.85,
-                      height: MediaQuery.of(context).size.height * 0.8,
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
                         border: Border.all(
@@ -98,6 +104,7 @@ class _StoryPageState extends State<StoryPage> {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
                 width: MediaQuery.of(context).size.width * 0.85,
                 height: MediaQuery.of(context).size.height * 0.065,
                 decoration: BoxDecoration(color: Colors.lightBlue[50]),
@@ -118,6 +125,8 @@ class _StoryPageState extends State<StoryPage> {
                                 _isListening = result;
                                 resultText = '';
                                 _pressAttention = false;
+                                _saidYes = false;
+                                _saidNo = false;
                               }),
                             );
 //                        }
@@ -136,6 +145,15 @@ class _StoryPageState extends State<StoryPage> {
                           _speechRecognition
                               .listen(locale: 'en_GB')
                               .then((result) => print(' $result'));
+                        }
+                        if (resultText.contains('yeah') ||
+                            resultText.contains('yes')) {
+                          _saidYes = true;
+                          _saidNo = false;
+                        } else if (resultText.contains('no') ||
+                            resultText.contains('nope')) {
+                          _saidNo = true;
+                          _saidYes = false;
                         }
                       },
                       color: _pressAttention ? Colors.blue : Colors.green,
