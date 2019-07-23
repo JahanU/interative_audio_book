@@ -10,7 +10,6 @@ class Story {
 }
 
 void createObject() {
-
   var _titles = [
     "Axe Trauma in the Woods (A)",
     "Whispers in the Dark (B)",
@@ -23,7 +22,6 @@ void createObject() {
   ];
 
   for (int i = 0; i < _titles.length; i++) {
-    allStories.add( new Story(_titles[i], _images[i]));
+    allStories.add(new Story(_titles[i], _images[i]));
   }
-
 }

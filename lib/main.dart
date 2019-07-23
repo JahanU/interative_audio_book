@@ -51,7 +51,7 @@ class HomeWidget extends StatelessWidget {
             // Open story Page
             Navigator.push(context,
                 new MaterialPageRoute(
-                    builder: (BuildContext context) => new StoryPage(allStories[index])
+                    builder: (BuildContext context) => new StoryPage(selectedStory: allStories[index])
                 )
             );
           },
