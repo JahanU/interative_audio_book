@@ -27,8 +27,11 @@ dependencies:
 
 # https://pub:dev/packages/speech_recognition:
   speech_recognition: ^0.3.0
-
-
+  
+#https://pub.dev/packages/flutter_tts
+# TEXT TO SPEECH 
+  flutter_tts: ^0.2.6
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
