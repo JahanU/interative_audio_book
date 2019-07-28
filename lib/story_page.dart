@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:interative_audio_book/backend/story_object.dart';
 import 'package:speech_recognition/speech_recognition.dart';
+import 'package:interative_audio_book/backend/text_to_speech.dart'; // Stores other variables used for the textt to speech
+import 'package:flutter_tts/flutter_tts.dart';
 
 class StoryPage extends StatefulWidget {
   final Story selectedStory;
@@ -11,6 +14,7 @@ class StoryPage extends StatefulWidget {
   _StoryPageState createState() => _StoryPageState();
 }
 
+
 class _StoryPageState extends State<StoryPage> {
   SpeechRecognition _speechRecognition;
   String resultText = "";
@@ -20,10 +24,95 @@ class _StoryPageState extends State<StoryPage> {
   bool _saidYes = false;
   bool _saidNo = false;
 
+
+
   @override
   void initState() {
     super.initState();
     initSpeechRecognizer();
+    initTts();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
+    newVoiceText = '';
+  }
+
+  initTts() {
+
+    newVoiceText = widget.selectedStory.story;
+
+
+    flutterTts = FlutterTts();
+    _getLanguages();
+    _getVoices();
+
+    if (voices != null && languages != null) {
+      voice = voices[1];
+      language = languages[26];
+    }
+
+    flutterTts.setStartHandler(() => setState(() => ttsState = TtsState.playing));
+
+    flutterTts.setCompletionHandler(() => setState(() => ttsState = TtsState.stopped));
+
+    flutterTts.setErrorHandler((msg) => setState(() => ttsState = TtsState.stopped));
+  } // Init ends
+
+  Future _getLanguages() async {
+    languages = await flutterTts.getLanguages;
+    if (languages != null) setState(() => languages);
+  }
+
+  Future _getVoices() async {
+    voices = await flutterTts.getVoices;
+    if (voices != null) setState(() => voices);
+  }
+
+  Future _speak() async {
+    if (newVoiceText != null) {
+      if (newVoiceText.isNotEmpty) {
+        var result = await flutterTts.speak(newVoiceText);
+        if (result == 1) setState(() => ttsState = TtsState.playing);
+      }
+    }
+  }
+
+  Future _stop() async {
+    var result = await flutterTts.stop();
+    if (result == 1) setState(() => ttsState = TtsState.stopped);
+  }
+
+  List<DropdownMenuItem<String>> getLanguageDropDownMenuItems() {
+    var items = List<DropdownMenuItem<String>>();
+    for (String type in languages)
+      items.add(DropdownMenuItem(value: type, child: Text(type)));
+
+    return items;
+  }
+
+  List<DropdownMenuItem<String>> getVoiceDropDownMenuItems() {
+    var items = List<DropdownMenuItem<String>>();
+    for (String type in voices)
+      items.add(DropdownMenuItem(value: type, child: Text(type)));
+
+    return items;
+  }
+
+  void changedLanguageDropDownItem(String selectedType) {
+    setState(() {
+      language = selectedType;
+      flutterTts.setLanguage(language);
+    });
+  }
+
+  void changedVoiceDropDownItem(String selectedType) {
+    setState(() {
+      voice = selectedType;
+      flutterTts.setVoice(voice);
+    });
   }
 
   void initSpeechRecognizer() {
@@ -56,7 +145,6 @@ class _StoryPageState extends State<StoryPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Welcome to Flutter',
       home: Scaffold(
         appBar: AppBar(
           title: Text(widget.selectedStory.title),
@@ -111,16 +199,33 @@ class _StoryPageState extends State<StoryPage> {
                 decoration: BoxDecoration(color: Colors.lightBlue[50]),
                 child: Text(resultText),
               ),
+              Container(
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(children: [
+                        voices != null && languages != null
+                            ? voiceDropDownSection()
+                            : Text("")
+                      ]))),
+
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    _buildButtonColumn(Colors.red, Colors.redAccent, Icons.stop,
+                        'STOP', _stop),
+                    _buildButtonColumn(Colors.green, Colors.greenAccent,
+                        Icons.play_arrow, 'PLAY', _speak)
+                  ]),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  /// START // STOP/PAUSE // CANCEL
+                  /// START // CANCEL
                   new RaisedButton(
                       textColor: Colors.white,
                       color: Colors.redAccent,
                       child: Icon(Icons.cancel),
                       onPressed: () {
-//                        if (_isListening == true) {
                         _speechRecognition.stop().then(
                               (result) => setState(() {
                                 _isListening = result;
@@ -130,7 +235,6 @@ class _StoryPageState extends State<StoryPage> {
                                 _saidNo = false;
                               }),
                             );
-//                        }
                       },
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),
@@ -158,7 +262,6 @@ class _StoryPageState extends State<StoryPage> {
                             _saidYes = false;
                           }
                         });
-
                       },
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
@@ -177,5 +280,45 @@ class _StoryPageState extends State<StoryPage> {
         ),
       ),
     );
+  }
+
+  Widget voiceDropDownSection() => Container(
+      padding: EdgeInsets.only(top: 50.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        DropdownButton( /// VOICE
+          isDense: true,
+          hint: new Text("Select accent", textAlign: TextAlign.center),
+          value: voice,
+          items: getVoiceDropDownMenuItems(),
+          onChanged: changedVoiceDropDownItem,
+        ),
+        DropdownButton( /// LANGUAGES
+        isDense: true,
+        hint: new Text("Select Language", textAlign: TextAlign.center),
+        value: language,
+        items: getLanguageDropDownMenuItems(),
+        onChanged: changedLanguageDropDownItem,
+      )
+      ]));
+
+  Column _buildButtonColumn(Color color, Color splashColor, IconData icon,
+      String label, Function func) {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+              icon: Icon(icon),
+              color: color,
+              splashColor: splashColor,
+              onPressed: () => func()),
+          Container(
+              margin: const EdgeInsets.only(top: 8.0),
+              child: Text(label,
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                      color: color)))
+        ]);
   }
 }
