@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:interative_audio_book/backend/story_object.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 import 'package:interative_audio_book/backend/text_to_speech.dart'; // Stores other variables used for the textt to speech
 import 'package:flutter_tts/flutter_tts.dart';
+import 'backend/story_object.dart';
 
 class StoryPage extends StatefulWidget {
   final Story selectedStory;
@@ -18,12 +18,14 @@ class StoryPage extends StatefulWidget {
 class _StoryPageState extends State<StoryPage> {
   SpeechRecognition _speechRecognition;
   String resultText = "";
+  String selectedStoryText;
   bool _isAvaliable = false;
   bool _isListening = false;
   bool _pressAttention = false;
   bool _saidYes = false;
   bool _saidNo = false;
 
+  var _storyCounter = 0;
 
 
   @override
@@ -42,8 +44,7 @@ class _StoryPageState extends State<StoryPage> {
 
   initTts() {
 
-    newVoiceText = widget.selectedStory.story;
-
+    newVoiceText = selectedStoryText = widget.selectedStory.story;
 
     flutterTts = FlutterTts();
     _getLanguages();
@@ -164,12 +165,6 @@ class _StoryPageState extends State<StoryPage> {
                   height: 200.0,
                 ),
               ),
-              new FloatingActionButton(
-                backgroundColor: _saidYes
-                    ? Colors.green
-                    : _saidNo ? Colors.red : Colors.blue,
-                mini: true,
-              ),
               new Container(
                 child: Expanded(
                   child: new SingleChildScrollView(
@@ -185,7 +180,7 @@ class _StoryPageState extends State<StoryPage> {
                         ),
                       ),
                       child: new Text(
-                        widget.selectedStory.story,
+                        selectedStoryText,
                         textDirection: TextDirection.ltr,
                       ),
                     ),
@@ -220,7 +215,7 @@ class _StoryPageState extends State<StoryPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  /// START // CANCEL
+                  ///  CANCEL // CONFIRM // START
                   new RaisedButton(
                       textColor: Colors.white,
                       color: Colors.redAccent,
@@ -241,32 +236,46 @@ class _StoryPageState extends State<StoryPage> {
 
                   new RaisedButton(
                       textColor: Colors.white,
+                      color: Colors.yellowAccent[700],
+                      child: Icon(Icons.done),
+                      onPressed: () {
+                        print('STORY COUNTER');
+                        print(_storyCounter);
+                        print('RESULT TEXT');
+                        print(resultText);
+                        print(storyOneAnswers[_storyCounter]);
+                        print(storyOneAnswers[_storyCounter].contains(resultText));
+                        setState(() {
+                            if (storyOneAnswers[_storyCounter].contains(resultText)) {
+                                selectedStoryText = storyOne[_storyCounter];
+                                _storyCounter += 1;
+                                print('SELECTED STORY ONE');
+                            }
+                            else if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
+                            selectedStoryText = storyOnePart2[_storyCounter];
+                            _storyCounter += 1;
+                            print('SELECTED STORY TWO');
+                            }
+                          });
+                      },
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0))),
+                  new RaisedButton(
+                      textColor: Colors.white,
                       child: Icon(Icons.mic),
                       onPressed: () {
                         _pressAttention = !_pressAttention;
 
-                        if (_pressAttention == true) {
-                          // Start state
+                        if (_pressAttention == true) {// Start state
                           _speechRecognition
                               .listen(locale: 'en_GB')
                               .then((result) => print(' $result'));
                         }
-                        setState(() {
-                          if (resultText.contains('yeah') ||
-                              resultText.contains('yes')) {
-                            _saidYes = true;
-                            _saidNo = false;
-                          } else if (resultText.contains('no') ||
-                              resultText.contains('nope')) {
-                            _saidNo = true;
-                            _saidYes = false;
-                          }
-                        });
                       },
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
                           ? EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 30.0)
+                              vertical: 10.0, horizontal: 28.0)
                           : EdgeInsets.symmetric(
                               vertical: 1.0, horizontal: 24.0),
                       shape: new RoundedRectangleBorder(

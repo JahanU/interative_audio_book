@@ -35,8 +35,6 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeWidget extends StatelessWidget {
-  List<int> _pauseTracker = [0, 0, 0];
-
   @override
   Widget build(BuildContext context) {
     print(allStories.length);
