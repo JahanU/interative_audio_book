@@ -57,7 +57,7 @@ var storyOne = [
   // Section 1
   """You reply to the CINC, “Okay, sir.” and you go to your dormitory to take a nap. In order to go to your dormitory, you must go across the main hall, full of infrastructure such as restaurants and movie theaters. As you walk across the main hall, you can see a lot of citizens hanging out. Once you have reached your dormitory, you lay down on your bed and slowly close your eyes and the darkness comes. Unknown amount of time has passed, and you suddenly hear the disturbing sound of alarm, “eeeoooeeoooeee”. You open your eyes and you decide to head back to the navigation bridge. As you run across the main hall, you see no signs of people as if they all had vanished. You realize something is up and rush towards the bridge. You have reached the entrance of the bridge. In order to open the door, you have to put your hand on the biometric scanner, but you suddenly hear the sound of footsteps coming from behind. The sound keeps getting louder and louder.
   Do you open the door or find a place to hide ?""",
-  
+
   // Section 3
   """You put your hand on the biometric scanner and as the door slowly opens, you see a silhouette casted in front of you. As you turn around to identify the unknown figure, “Bang!!”. You have died by the laser-gun, shot by an extraterrestrial. Restart the game.  """,
 
