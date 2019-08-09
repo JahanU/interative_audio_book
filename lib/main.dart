@@ -20,13 +20,6 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
             backgroundColor: Colors.teal,
             actions: <Widget>[
-              new IconButton(
-                icon: new Icon(Icons.record_voice_over),
-                tooltip: "Instructions",
-                onPressed: () {
-                  print("Text to speech for instructions here");
-                },
-              )
             ],
           ),
           body: new HomeWidget(),
