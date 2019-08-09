@@ -25,7 +25,7 @@ class _StoryPageState extends State<StoryPage> {
   bool _saidYes = false;
   bool _saidNo = false;
 
-  var _storyCounter = -1;
+  var _storyCounter = 0;
 
 
   @override
@@ -245,18 +245,18 @@ class _StoryPageState extends State<StoryPage> {
                         print(resultText);
                         print(storyOneAnswers[_storyCounter]);
                         print(storyOneAnswers[_storyCounter].contains(resultText));
-//                        setState(() {
-//                            if (storyOneAnswers[_storyCounter].contains(resultText)) {
-//                                selectedStoryText = storyOne[_storyCounter];
-//                                _storyCounter += 1;
-//                                print('SELECTED STORY ONE');
-//                            }
-//                            else if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
-//                            selectedStoryText = storyOnePart2[_storyCounter];
-//                            _storyCounter += 1;
-//                            print('SELECTED STORY TWO');
-//                            }
-//                          });
+                        setState(() {
+                            if (storyOneAnswers[_storyCounter].contains(resultText)) {
+                                selectedStoryText = storyOne[_storyCounter];
+                                _storyCounter += 1;
+                                print('SELECTED STORY ONE');
+                            }
+                            else if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
+                            selectedStoryText = storyOnePart2[_storyCounter];
+                            _storyCounter += 1;
+                            print('SELECTED STORY TWO');
+                            }
+                          });
                       },
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),
@@ -271,18 +271,6 @@ class _StoryPageState extends State<StoryPage> {
                               .listen(locale: 'en_GB')
                               .then((result) => print(' $result'));
                         }
-                        setState(() {
-                            if (storyOneAnswers[_storyCounter].contains(resultText)) {
-                                selectedStoryText = storyOne[_storyCounter];
-                                _storyCounter += 1;
-                                print('SELECTED STORY ONE');
-                            }
-                            else if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
-                            selectedStoryText = storyOnePart2[_storyCounter];
-                            _storyCounter += 1;
-                            print('SELECTED STORY TWO');
-                            }
-                          });
                       },
                       color: _pressAttention ? Colors.blue : Colors.green,
                       padding: _pressAttention
