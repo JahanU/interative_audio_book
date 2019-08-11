@@ -43,14 +43,14 @@ void createObject() {
 }
 
 var storyOneAnswers = [
-  'take some rest raft',  // Intro
+  'take some rest raft rust',  // Intro
   'open the door',   // Section 1 response 1
   'follow the CINC’s order and evacuate.', // Section 2 response 1
 ];
 var storyOneAnswersPart2 = [
-  'reject the CINC’ s recommendation',   // Intro
+  'I reject the CINC’s recommendation',   // Intro
   'find a place to hide', // Section 1 response 2
-  'deny the CINC’s order and go to the weapon storage room. ',  // Section 2 response 1
+  'deny the CINC’s order and go to the weapon storage room. then I',  // Section 2 response 1
 ];
 
 var storyOne = [

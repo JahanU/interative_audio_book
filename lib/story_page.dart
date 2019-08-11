@@ -39,7 +39,7 @@ class _StoryPageState extends State<StoryPage> {
   void dispose() {
     super.dispose();
     flutterTts.stop();
-    newVoiceText = '';
+    newVoiceText = selectedStoryText = '';
   }
 
   initTts() {
@@ -52,7 +52,7 @@ class _StoryPageState extends State<StoryPage> {
 
     if (voices != null && languages != null) {
       voice = voices[1];
-      language = languages[26];
+      language = languages[languages.length - 1];
     }
 
     flutterTts.setStartHandler(() => setState(() => ttsState = TtsState.playing));
@@ -244,18 +244,25 @@ class _StoryPageState extends State<StoryPage> {
                         print('RESULT TEXT');
                         print(resultText);
                         print(storyOneAnswers[_storyCounter]);
-                        print(storyOneAnswers[_storyCounter].contains(resultText));
+                        print(storyOneAnswersPart2[_storyCounter]);
+
                         setState(() {
+                          if (resultText.isNotEmpty) {
                             if (storyOneAnswers[_storyCounter].contains(resultText)) {
-                                selectedStoryText = storyOne[_storyCounter];
+                              newVoiceText = selectedStoryText  = storyOne[_storyCounter];
+                              _storyCounter += 1;
+                              print('SELECTED STORY ONE');
+                            }
+                            else
+                            if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
+                              newVoiceText = selectedStoryText  = storyOnePart2[_storyCounter];
+                              if (storyOneAnswersPart2[_storyCounter] == 'I reject the CINC’s recommendation') {
                                 _storyCounter += 1;
-                                print('SELECTED STORY ONE');
+                              }
+                              _storyCounter += 1;
+                              print('SELECTED STORY TWO');
                             }
-                            else if (storyOneAnswersPart2[_storyCounter].contains(resultText)) {
-                            selectedStoryText = storyOnePart2[_storyCounter];
-                            _storyCounter += 1;
-                            print('SELECTED STORY TWO');
-                            }
+                          }
                           });
                       },
                       shape: new RoundedRectangleBorder(
